@@ -42,7 +42,6 @@ def check_solvability(input, n):
     index = r - index
     lin = input.reshape(1, n)
     lin = lin.tolist()[0]
-    print(lin)
     lin.remove(0)
 
     inversions = 0 
@@ -67,13 +66,13 @@ def check_solvability(input, n):
 
 
 
-input = [8, 1, 2, 0, 4, 3, 7, 6, 5]
-input = np.array(input)
-input = input.reshape(3,3)
-n = input.shape[0]*input.shape[1]
-print(n)
-print(input)
+# input = [8, 1, 2, 0, 4, 3, 7, 6, 5]
+# input = np.array(input)
+# input = input.reshape(3,3)
+# n = input.shape[0]*input.shape[1]
+# print(n)
+# print(input)
 
 
-print(check_solvability(input, n))
+# print(check_solvability(input, n))
 
