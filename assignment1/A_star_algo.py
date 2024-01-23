@@ -218,37 +218,37 @@ class Puzzle:
 
 
     
-n = 3
-input = [7, 2, 4, 5, 0, 6, 8, 3, 1]
-# input = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+# n = 3
+# input = [7, 2, 4, 5, 0, 6, 8, 3, 1]
+# # input = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+# goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-input = np.array(input)
-input = input.reshape(n,n)
-goal = np.array(goal)
-goal = goal.reshape(n,n)
-
-
-
-x = Puzzle(input, goal)
-# print(x.test())
+# input = np.array(input)
+# input = input.reshape(n,n)
+# goal = np.array(goal)
+# goal = goal.reshape(n,n)
 
 
-t1, path1, l1, n1 = x.run_manhattan()
+
+# x = Puzzle(input, goal)
+# # print(x.test())
 
 
-t2, path2, l2, n2 = x.run_hamming()
+# t1, path1, l1, n1 = x.run_manhattan()
 
-t3, path3, l3, n3 = x.run_manhattan_linear()
-# t2 = end1-start1
-print("Manhattan Distance: ")
-print(f"Time: {t1}, length of soln: {l1}, nodes taken out: {n1}\n")
 
-print("Hamming Priority: \n")
-print(f"Time: {t2}, length of soln: {l2}, nodes taken out: {n2}\n")
+# t2, path2, l2, n2 = x.run_hamming()
 
-print("Manhattan Linear: \n")
-print(f"Time: {t3}, length of soln: {l3}, nodes taken out: {n3}\n")
+# t3, path3, l3, n3 = x.run_manhattan_linear()
+# # t2 = end1-start1
+# print("Manhattan Distance: ")
+# print(f"Time: {t1}, length of soln: {l1}, nodes taken out: {n1}\n")
+
+# print("Hamming Priority: \n")
+# print(f"Time: {t2}, length of soln: {l2}, nodes taken out: {n2}\n")
+
+# print("Manhattan Linear: \n")
+# print(f"Time: {t3}, length of soln: {l3}, nodes taken out: {n3}\n")
 
 
 
