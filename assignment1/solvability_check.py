@@ -40,7 +40,7 @@ def check_solvability(input, n):
     index = np.where(input == 0)[0][0]
     r = input.shape[0]
     index = r - index
-    lin = input.reshape(1, n)
+    lin = input.reshape(1, n*n)
     lin = lin.tolist()[0]
     lin.remove(0)
 
@@ -66,13 +66,12 @@ def check_solvability(input, n):
 
 
 
-# input = [8, 1, 2, 0, 4, 3, 7, 6, 5]
-# input = np.array(input)
-# input = input.reshape(3,3)
+n = 4
+input = [13, 2, 10, 3, 1, 12, 8, 4, 5, 0, 9, 6, 15, 14, 11, 7]
+input = np.array(input)
+input = input.reshape(n,n)
 # n = input.shape[0]*input.shape[1]
 # print(n)
-# print(input)
 
-
-# print(check_solvability(input, n))
+print(check_solvability(input, n))
 
