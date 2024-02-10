@@ -1,5 +1,54 @@
+import numpy as np
 
-from TicTacToe import *
+class TicTacToe:
+    def __init__(self):
+        self.board = self.initialize_board()
+        self.current_player = "X"
+        self.game_status = 'In progress'
+
+    def initialize_board(self):
+        return np.full((3, 3), "")
+    
+    def display_board(self):
+        print(self.board)
+
+    def make_move(self, row, col):
+        if self.board[row, col] == "":
+            self.board[row, col] = self.current_player
+            self.current_player = "O" if self.current_player == "X" else "X"
+        else:
+            print('Invalid move')
+
+    def get_available_moves(self):
+        return np.argwhere(self.board == "")
+    
+    def check_winner(self):
+        for i in range(3):
+            if self.board[i, 0] == self.board[i, 1] == self.board[i, 2] != "":
+                self.game_status = 'Winner: ' + str(self.board[i, 0])
+                return self.game_status
+            if self.board[0, i] == self.board[1, i] == self.board[2, i] != "":
+                self.game_status = 'Winner: ' + str(self.board[i, 0])
+                return self.game_status
+            if self.board[0, 0] == self.board[1, 1] == self.board[2, 2] != "":
+                self.game_status = 'Winner: ' + str(self.board[1, 1])
+                return self.game_status
+            if self.board[0, 2] == self.board[1, 1] == self.board[2, 0] != "":
+                self.game_status = 'Winner: ' + str(self.board[1, 1])
+                return self.game_status
+            if np.all(self.board != ""):
+                self.game_status = 'Draw'
+                return self.game_status
+            return self.game_status
+
+    def copy(self):
+        new_game = TicTacToe()
+        new_game.board = self.board.copy()
+        new_game.current_player = self.current_player
+        new_game.game_status = self.game_status
+        return new_game
+        
+
 
 
 class Agent():
@@ -14,17 +63,19 @@ class Agent():
         player = 0
         opponent = 0
 
-
-        
+        if np.all(board != ""):
+            player = 8
+            opponent = 8
+            return 0
         for i in range(3):
-            if self.opponent not in board[i, :]:
+            if self.opponent not in [board[i, 0], board[i, 1], board[i, 2]]:
                 player+=1
-            if self.player not in board[i, :]:
+            if self.player not in [board[i, 0], board[i, 1], board[i, 2]]:
                 opponent+=1
                     
-            if self.opponent not in board[:, i]:
+            if self.opponent not in [board[0, i], board[1, i], board[2, i]]:
                 player+=1
-            if self.player not in board[:, i]:
+            if self.player not in [board[i, 0], board[i, 1], board[i, 2]]:
                 opponent+=1
                 
         
@@ -37,11 +88,7 @@ class Agent():
                 player+=1
         if self.player not in [board[0, 2], board[1, 1], board[2, 0]]:
                 opponent+=1
-
-        if self.game.check_winner(board) == "Winner: " + self.player:
-            return float('inf')
-        elif self.game.check_winner(board) == "Winner: " + self.opponent:
-                return float('-inf')
+        
 
                 
         return player - opponent
@@ -63,9 +110,7 @@ class Agent():
 
     def minimax(self, board, depth, alpha, beta, is_maximizing):
         if self.is_terminal_state(board) or depth == 9:
-            evaluation = self.evaluate_state(board)
-            return evaluation
-        
+            return self.evaluate_state(board)
         
         if is_maximizing:
             max_eval = float('-inf')
@@ -110,3 +155,20 @@ class Agent():
     
 
 
+
+game = TicTacToe()
+agent = Agent(game)
+
+# game.display_board()
+# game.check_winner()
+
+while (game.check_winner() == 'In progress'):
+    if game.current_player == 'X':
+        game.display_board()
+        row = int(input('Enter row: '))
+        col = int(input('Enter col: '))
+        game.make_move(row, col)
+    else:
+        agent.make_best_move()
+
+print(game.check_winner())
