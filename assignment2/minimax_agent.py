@@ -70,12 +70,13 @@ class TicTacToe_Agent:
         return False
     
     def evaluate_state(self, board):
+        f = self.count_open_directions(board, self.PLAYER_MAX) - self.count_open_directions(board, self.PLAYER_MIN)
         if self.check_winner(board, self.PLAYER_MAX):
             return math.inf
         elif self.check_winner(board, self.PLAYER_MIN):
             return -math.inf
         else:
-            return self.count_open_directions(board, self.PLAYER_MAX) - self.count_open_directions(board, self.PLAYER_MIN)
+            return f
         
     def is_terminal_state(self, board): 
         return self.check_winner(board, self.PLAYER_MAX) or self.check_winner(board, self.PLAYER_MIN) or not any(self.EMPTY in row for row in board)
@@ -162,6 +163,8 @@ class TicTacToe_Agent:
             return best_value, best_move
         
     def play(self):
+        depth = int(input("Enter the depth for the Minimax algorithm: "))
+
         current_board = self.board  # Initial board state
         current_player = self.choose_starting_player() # Human player starts
 
@@ -182,7 +185,7 @@ class TicTacToe_Agent:
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax(current_board, 9, False)  # Assuming depth 9 for full game tree search
+                _, move = self.minimax(current_board, depth, False)  # Assuming depth 9 for full game tree search
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX
@@ -209,6 +212,8 @@ class TicTacToe_Agent:
 
 
     def play_with_alpha_beta_pruning(self):
+
+        depth = int(input("Enter the depth for the Minimax algorithm: "))
         current_board = self.board  # Initial board state
         current_player = self.choose_starting_player()
         while not self.is_terminal_state(current_board):
@@ -222,13 +227,13 @@ class TicTacToe_Agent:
                             current_board = self.make_move(current_board, (row, col), self.PLAYER_MAX)
                             move = (row, col)  # Successfully made a move
                         else:
-                            print('Invalid move. Try again.')
+                            print('Invalid move. Try again.') 
                     except ValueError:
                         print('Please enter valid row and column numbers.')
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax_with_alpha_beta_pruning(current_board, 9, -math.inf, math.inf, False)
+                _, move = self.minimax_with_alpha_beta_pruning(current_board, depth, -math.inf, math.inf, False)
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX

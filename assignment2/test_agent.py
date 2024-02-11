@@ -48,11 +48,70 @@ def test(board_state, expected_move):
     ai_move = game.get_ai_move(False)  # Assuming 'O' is the AI here
     print(ai_move)
     assert ai_move == expected_move, "AI should make the correct move."
-    # board = game.make_move(game.board, ai_move, 'O')
-    # assert game.get_legal_moves(board) == expected_legal_moves, "The legal moves should be as expected."
-    
+
+
+def test_evaluation():
+    game = TicTacToe_Agent()
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', 'X']
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == 0, "The board should be a draw."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', None]
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == 0, "The board should be a draw."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', None, 'X']
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == -1, "The board should be a win for 'O'."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, 'X', 'X']
+    ]
+    game.set_board(board_state)
+
+    assert game.evaluate_state(game.board) == 2, "The board should be a win for 'X'."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, None, 'X']
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == 1, "The board should be a draw."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, 'X', None]
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == 2, "The board should be a draw."
+
+    board_state = [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['X', None, None]
+    ]
+    game.set_board(board_state)
+    assert game.evaluate_state(game.board) == math.inf, "X won the game."
+
 
 
 test_winning_condition_for_x()
 test_blocking_move()
 test_draw_condition()
+test_evaluation()
