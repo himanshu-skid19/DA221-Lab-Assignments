@@ -15,6 +15,10 @@ class TicTacToe_Agent:
         _, move = self.minimax(self.board, 9, is_maximising)
         return move
     
+    def get_ai_move_alpha_beta(self, is_maximising=True):
+        _, move = self.minimax_with_alpha_beta_pruning(self.board, 9, -math.inf, math.inf, is_maximising)
+        return move
+    
     def choose_starting_player(self):
         player_choice = input("Choose the starting player - 'X' for you or 'O' for AI: ").strip().upper()
         if player_choice == 'X':

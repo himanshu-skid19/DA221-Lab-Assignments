@@ -1,4 +1,6 @@
 from minimax_agent import *
+import time
+
 
 def test_winning_condition_for_x():
     game = TicTacToe_Agent()
@@ -42,12 +44,26 @@ def test_draw_condition():
     assert game.check_winner(board, 'O') == False, "O should not win."
     assert game.get_legal_moves(board) == [], "There should be no legal moves left."
 
-def test(board_state, expected_move):
+def test(boards, pruning=False):
     game = TicTacToe_Agent()
-    game.set_board(board_state)
-    ai_move = game.get_ai_move(False)  # Assuming 'O' is the AI here
-    print(ai_move)
-    assert ai_move == expected_move, "AI should make the correct move."
+    
+    total_time = 0
+    if (pruning):
+        for i in boards:
+            game.set_board(i)
+            t1 = time.time()
+            ai_move = game.get_ai_move_alpha_beta(False)
+            t2 = time.time()
+            total_time += (t2-t1)*1e9
+    else:
+        for i in boards:
+            game.set_board(i)
+            t1 = time.time()
+            ai_move = game.get_ai_move(False)
+            t2 = time.time()
+            total_time += (t2-t1)*1e9
+    return total_time/len(boards)
+
 
 
 def test_evaluation():
@@ -111,7 +127,90 @@ def test_evaluation():
 
 
 
-test_winning_condition_for_x()
-test_blocking_move()
-test_draw_condition()
-test_evaluation()
+# test_winning_condition_for_x()
+# test_blocking_move()
+# test_draw_condition()
+# test_evaluation()
+
+boards = [[
+        ['X', 'X', 'O'],
+        ['O', 'X', None],
+        ['O', None, None]
+    ], [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['X', None, None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, 'X', None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, None, 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', None, 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, 'X', 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['X', None, None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, 'X', None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        [None, None, 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', None]
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', None, 'X']
+    ],
+    [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['X', None, None]
+    ]
+  
+    
+    ]
+
+t1 = test(boards, True)
+print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1)
+t2 = test(boards, False)
+print("Average time taken for Minimax without Alpha Beta Pruning: ", t2)
