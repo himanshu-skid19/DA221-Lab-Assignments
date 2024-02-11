@@ -14,6 +14,17 @@ class TicTacToe_Agent:
     def get_ai_move(self, is_maximising=True):
         _, move = self.minimax(self.board, 9, is_maximising)
         return move
+    
+    def choose_starting_player(self):
+        player_choice = input("Choose the starting player - 'X' for you or 'O' for AI: ").strip().upper()
+        if player_choice == 'X':
+            return self.PLAYER_MAX
+        elif player_choice == 'O':
+            return self.PLAYER_MIN
+        else:
+            print("Invalid choice. Defaulting to 'X' starting.")
+            return self.PLAYER_MAX
+
     def count_open_directions(self, board, player):
         count = 0
         size = len(board)
@@ -152,38 +163,38 @@ class TicTacToe_Agent:
         
     def play(self):
         current_board = self.board  # Initial board state
-        current_player = self.PLAYER_MIN  # Human player starts
+        current_player = self.choose_starting_player() # Human player starts
 
         while not self.is_terminal_state(current_board):
             self.display_board(current_board)
-            if current_player == self.PLAYER_MIN:
+            if current_player == self.PLAYER_MAX:
                 move = None
                 while move is None:
                     try:
                         row, col = map(int, input('Enter row and column (0-2, space-separated): ').split())
                         if (0 <= row <= 2 and 0 <= col <= 2) and current_board[row][col] == self.EMPTY:
-                            current_board = self.make_move(current_board, (row, col), self.PLAYER_MIN)
+                            current_board = self.make_move(current_board, (row, col), self.PLAYER_MAX)
                             move = (row, col)  # Successfully made a move
                         else:
                             print('Invalid move. Try again.')
                     except ValueError:
                         print('Please enter valid row and column numbers.')
-                current_player = self.PLAYER_MAX
+                current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax(current_board, 9, True)  # Assuming depth 9 for full game tree search
+                _, move = self.minimax(current_board, 9, False)  # Assuming depth 9 for full game tree search
                 if move:
-                    current_board = self.make_move(current_board, move, self.PLAYER_MAX)
-                    current_player = self.PLAYER_MIN
+                    current_board = self.make_move(current_board, move, self.PLAYER_MIN)
+                    current_player = self.PLAYER_MAX
                 else:
                     print("No valid moves left. It's a draw.")
                     break
 
-            if self.check_winner(current_board, self.PLAYER_MAX):
+            if self.check_winner(current_board, self.PLAYER_MIN):
                 self.display_board(current_board)
                 print('AI wins!')
                 break
-            elif self.check_winner(current_board, self.PLAYER_MIN):
+            elif self.check_winner(current_board, self.PLAYER_MAX):
                 self.display_board(current_board)
                 print('Congratulations, you win!')
                 break
@@ -199,38 +210,37 @@ class TicTacToe_Agent:
 
     def play_with_alpha_beta_pruning(self):
         current_board = self.board  # Initial board state
-        current_player = self.PLAYER_MIN
-
+        current_player = self.choose_starting_player()
         while not self.is_terminal_state(current_board):
             self.display_board(current_board)
-            if current_player == self.PLAYER_MIN:
+            if current_player == self.PLAYER_MAX:
                 move = None
                 while move is None:
                     try:
                         row, col = map(int, input('Enter row and column (0-2, space-separated): ').split())
                         if (0 <= row <= 2 and 0 <= col <= 2) and current_board[row][col] == self.EMPTY:
-                            current_board = self.make_move(current_board, (row, col), self.PLAYER_MIN)
+                            current_board = self.make_move(current_board, (row, col), self.PLAYER_MAX)
                             move = (row, col)  # Successfully made a move
                         else:
                             print('Invalid move. Try again.')
                     except ValueError:
                         print('Please enter valid row and column numbers.')
-                current_player = self.PLAYER_MAX
+                current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax_with_alpha_beta_pruning(current_board, 9, -math.inf, math.inf, True)
+                _, move = self.minimax_with_alpha_beta_pruning(current_board, 9, -math.inf, math.inf, False)
                 if move:
-                    current_board = self.make_move(current_board, move, self.PLAYER_MAX)
-                    current_player = self.PLAYER_MIN
+                    current_board = self.make_move(current_board, move, self.PLAYER_MIN)
+                    current_player = self.PLAYER_MAX
                 else:
                     print("No valid moves left. It's a draw.")
                     break
 
-            if self.check_winner(current_board, self.PLAYER_MAX):
+            if self.check_winner(current_board, self.PLAYER_MIN):
                 self.display_board(current_board)
                 print('AI wins!')
                 break
-            elif self.check_winner(current_board, self.PLAYER_MIN):
+            elif self.check_winner(current_board, self.PLAYER_MAX):
                 self.display_board(current_board)
                 print('Congratulations, you win!')
                 break
@@ -245,8 +255,8 @@ class TicTacToe_Agent:
 
 
 
-if __name__ == '__main__':
-    game = TicTacToe_Agent()
-    # game.play()
-    game.play_with_alpha_beta_pruning( )
+# if __name__ == '__main__':
+#     game = TicTacToe_Agent()
+#     # game.play()
+#     game.play_with_alpha_beta_pruning( )
     

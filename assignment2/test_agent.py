@@ -42,6 +42,16 @@ def test_draw_condition():
     assert game.check_winner(board, 'O') == False, "O should not win."
     assert game.get_legal_moves(board) == [], "There should be no legal moves left."
 
+def test(board_state, expected_move):
+    game = TicTacToe_Agent()
+    game.set_board(board_state)
+    ai_move = game.get_ai_move(False)  # Assuming 'O' is the AI here
+    print(ai_move)
+    assert ai_move == expected_move, "AI should make the correct move."
+    # board = game.make_move(game.board, ai_move, 'O')
+    # assert game.get_legal_moves(board) == expected_legal_moves, "The legal moves should be as expected."
+    
+
 
 test_winning_condition_for_x()
 test_blocking_move()
