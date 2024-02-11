@@ -12,12 +12,14 @@ class TicTacToe_Agent:
         self.board = board
 
     def get_ai_move(self, is_maximising=True):
-        _, move = self.minimax(self.board, 9, is_maximising)
-        return move
+        n = 1
+        _, move, n = self.minimax(self.board, 9, is_maximising, n)
+        return move, n
     
     def get_ai_move_alpha_beta(self, is_maximising=True):
-        _, move = self.minimax_with_alpha_beta_pruning(self.board, 9, -math.inf, math.inf, is_maximising)
-        return move
+        n=1
+        _, move, n = self.minimax_with_alpha_beta_pruning(self.board, 9, -math.inf, math.inf, is_maximising, n)
+        return move, n
     
     def choose_starting_player(self):
         player_choice = input("Choose the starting player - 'X' for you or 'O' for AI: ").strip().upper()
@@ -110,68 +112,72 @@ class TicTacToe_Agent:
         
         return new_board
 
-    def minimax(self, board,  depth, is_maximising):
+    def minimax(self, board,  depth, is_maximising, n):
         if self.is_terminal_state(board) or depth == 0:
-            return self.evaluate_state(board), None
+            return self.evaluate_state(board), None, n
 
         if is_maximising:
             best_value = -math.inf
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MAX)
-                value, _ = self.minimax(new_board, depth - 1, False)
+                value, _, n = self.minimax(new_board, depth - 1, False, n)
+                n += 1
                 if value >= best_value:
                     best_value = value
                     best_move = move
-            return best_value, best_move
+            return best_value, best_move, n
         else:
             best_value = math.inf
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MIN)
-                value, _ = self.minimax(new_board, depth - 1, True)
+                value, _, n = self.minimax(new_board, depth - 1, True, n)
+                n+=1
                 if value <= best_value:
                     best_value = value
                     best_move = move
-            return best_value, best_move
+            return best_value, best_move, n
         
-    def minimax_with_alpha_beta_pruning(self, board, depth, alpha, beta, is_maximising):
+    def minimax_with_alpha_beta_pruning(self, board, depth, alpha, beta, is_maximising, n):
         if self.is_terminal_state(board) or depth == 0:
-            return self.evaluate_state(board), None
+            return self.evaluate_state(board), None, n
 
         if is_maximising:
             best_value = -math.inf
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MAX)
-                value, _ = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, False)
+                value, _, n = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, False, n)
+                n+=1
                 if value >= best_value:
                     best_value = value
                     best_move = move
                 alpha = max(alpha, best_value)
                 if beta <= alpha:
                     break
-            return best_value, best_move
+            return best_value, best_move, n
         else:
             best_value = math.inf
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MIN)
-                value, _ = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, True)
+                value, _,n = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, True, n)
+                n+=1
                 if value <= best_value:
                     best_value = value
                     best_move = move
                 beta = min(beta, best_value)
                 if beta <= alpha:
                     break
-            return best_value, best_move
+            return best_value, best_move, n
         
     def play(self):
         depth = int(input("Enter the depth for the Minimax algorithm: "))
 
         current_board = self.board  # Initial board state
         current_player = self.choose_starting_player() # Human player starts
-
+        n = 0
         while not self.is_terminal_state(current_board):
             self.display_board(current_board)
             if current_player == self.PLAYER_MAX:
@@ -189,7 +195,7 @@ class TicTacToe_Agent:
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax(current_board, depth, False)  # Assuming depth 9 for full game tree search
+                _, move,n = self.minimax(current_board, depth, False, n)  # Assuming depth 9 for full game tree search
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX
@@ -220,6 +226,7 @@ class TicTacToe_Agent:
         depth = int(input("Enter the depth for the Minimax algorithm: "))
         current_board = self.board  # Initial board state
         current_player = self.choose_starting_player()
+        n= 0
         while not self.is_terminal_state(current_board):
             self.display_board(current_board)
             if current_player == self.PLAYER_MAX:
@@ -237,7 +244,7 @@ class TicTacToe_Agent:
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move = self.minimax_with_alpha_beta_pruning(current_board, depth, -math.inf, math.inf, False)
+                _, move, n = self.minimax_with_alpha_beta_pruning(current_board, depth, -math.inf, math.inf, False, n)
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX
