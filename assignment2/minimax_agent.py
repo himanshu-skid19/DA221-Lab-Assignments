@@ -11,9 +11,8 @@ class TicTacToe_Agent:
     def set_board(self, board):
         self.board = board
 
-    def get_ai_move(self, is_maximising=True):
-        n = 1
-        _, move, n = self.minimax(self.board, 9, is_maximising, n)
+    def get_ai_move(self, n, is_maximising=True):
+        _, move, n = self.minimax(self.board, 9, n, is_maximising, n)
         return move, n
     
     def get_ai_move_alpha_beta(self, is_maximising=True):
@@ -112,8 +111,8 @@ class TicTacToe_Agent:
         
         return new_board
 
-    def minimax(self, board,  depth, is_maximising, n):
-        if self.is_terminal_state(board) or depth == 0:
+    def minimax(self, board,  current_depth, depth, is_maximising, n):
+        if self.is_terminal_state(board) or current_depth == depth:
             return self.evaluate_state(board), None, n
 
         if is_maximising:
@@ -121,7 +120,7 @@ class TicTacToe_Agent:
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MAX)
-                value, _, n = self.minimax(new_board, depth - 1, False, n)
+                value, _, n = self.minimax(new_board, current_depth - 1, depth, False, n)
                 n += 1
                 if value >= best_value:
                     best_value = value
@@ -132,15 +131,15 @@ class TicTacToe_Agent:
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MIN)
-                value, _, n = self.minimax(new_board, depth - 1, True, n)
+                value, _, n = self.minimax(new_board, current_depth-1, depth, True, n)
                 n+=1
                 if value <= best_value:
                     best_value = value
                     best_move = move
             return best_value, best_move, n
         
-    def minimax_with_alpha_beta_pruning(self, board, depth, alpha, beta, is_maximising, n):
-        if self.is_terminal_state(board) or depth == 0:
+    def minimax_with_alpha_beta_pruning(self, board, current_depth, depth, alpha, beta, is_maximising, n):
+        if self.is_terminal_state(board) or current_depth == depth:
             return self.evaluate_state(board), None, n
 
         if is_maximising:
@@ -148,7 +147,7 @@ class TicTacToe_Agent:
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MAX)
-                value, _, n = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, False, n)
+                value, _, n = self.minimax_with_alpha_beta_pruning(new_board, current_depth - 1, depth, alpha, beta, False, n)
                 n+=1
                 if value >= best_value:
                     best_value = value
@@ -162,7 +161,7 @@ class TicTacToe_Agent:
             best_move = None
             for move in self.get_legal_moves(board):
                 new_board = self.make_move(board, move, self.PLAYER_MIN)
-                value, _,n = self.minimax_with_alpha_beta_pruning(new_board, depth - 1, alpha, beta, True, n)
+                value, _,n = self.minimax_with_alpha_beta_pruning(new_board, current_depth - 1, depth, alpha, beta, True, n)
                 n+=1
                 if value <= best_value:
                     best_value = value
@@ -195,7 +194,7 @@ class TicTacToe_Agent:
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move,n = self.minimax(current_board, depth, False, n)  # Assuming depth 9 for full game tree search
+                _, move,n = self.minimax(current_board, 9, depth, False, n)  # Assuming depth 9 for full game tree search
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX
@@ -223,7 +222,7 @@ class TicTacToe_Agent:
 
     def play_with_alpha_beta_pruning(self):
 
-        depth = int(input("Enter the depth for the Minimax algorithm: "))
+        depth = int(input("Enter the maximum depth for the Minimax algorithm [0 for lowest and 8 for highest]: "))
         current_board = self.board  # Initial board state
         current_player = self.choose_starting_player()
         n= 0
@@ -244,7 +243,7 @@ class TicTacToe_Agent:
                 current_player = self.PLAYER_MIN
             else:
                 print("AI's turn...")
-                _, move, n = self.minimax_with_alpha_beta_pruning(current_board, depth, -math.inf, math.inf, False, n)
+                _, move, n = self.minimax_with_alpha_beta_pruning(current_board, 9, depth, -math.inf, math.inf, False, n)
                 if move:
                     current_board = self.make_move(current_board, move, self.PLAYER_MIN)
                     current_player = self.PLAYER_MAX

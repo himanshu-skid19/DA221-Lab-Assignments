@@ -16,8 +16,10 @@ def test_winning_condition_for_x():
 
     game.set_board(board_state)
     assert game.check_winner(game.board, 'X') == False, "X should not be a winner yet."
-    ai_move = game.get_ai_move()
+    depth = 8
+    ai_move, n = game.get_ai_move(depth)
     # print(ai_move)
+    print(ai_move)
     board = game.make_move(game.board, ai_move, 'X')
     assert game.check_winner(board, 'X') == True, "X should be a winner now."
 
@@ -29,7 +31,8 @@ def test_blocking_move():
         [None, None, None]
     ]
     game.set_board(board_state)
-    ai_move = game.get_ai_move(False)  # Assuming 'O' is the AI here
+    depth = 6
+    ai_move, n = game.get_ai_move(depth, False)  # Assuming 'O' is the AI here
     assert ai_move == (1, 1) or ai_move == (1, 2), "AI should block 'X' from winning."
 
 def test_draw_condition():
@@ -40,7 +43,8 @@ def test_draw_condition():
         ['O', 'X', None]
     ]
     game.set_board(board_state)
-    ai_move = game.get_ai_move(False)  # Assuming 'O' is the AI here
+    depth = 8
+    ai_move,n = game.get_ai_move(depth,False)  # Assuming 'O' is the AI here
     board = game.make_move(game.board, ai_move, 'O')
     assert game.is_terminal_state(board) == True, "The game should be in a terminal state."
     assert game.check_winner(board, 'X') == False, "X should not win."
@@ -133,8 +137,8 @@ def test_evaluation():
 
 
 
-# test_winning_condition_for_x()
-# test_blocking_move()
+test_winning_condition_for_x()
+test_blocking_move()
 # test_draw_condition()
 # test_evaluation()
 
@@ -216,12 +220,12 @@ boards = [[
     
     ]
 
-t1, n1 = test(boards, True)
-print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "ms")
-print("Average number of nodes evaluated: ", int(n1))
-t2, n2 = test(boards, False)
-print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "ms")
-print("Average number of nodes evaluated: ", int(n2))
+# t1, n1 = test(boards, True)
+# print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "ms")
+# print("Average number of nodes evaluated: ", int(n1))
+# t2, n2 = test(boards, False)
+# print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "ms")
+# print("Average number of nodes evaluated: ", int(n2))
 
 
 # game = TicTacToe_Agent()
