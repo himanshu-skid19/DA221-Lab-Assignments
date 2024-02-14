@@ -33,7 +33,7 @@ def test_blocking_move():
     game.set_board(board_state)
     depth = 6
     ai_move, n = game.get_ai_move(depth, False)  # Assuming 'O' is the AI here
-    assert ai_move == (1, 1) or ai_move == (1, 2), "AI should block 'X' from winning."
+    assert ai_move == (1, 1), "AI should block 'X' from winning."
 
 def test_draw_condition():
     game = TicTacToe_Agent()
@@ -51,7 +51,7 @@ def test_draw_condition():
     assert game.check_winner(board, 'O') == False, "O should not win."
     assert game.get_legal_moves(board) == [], "There should be no legal moves left."
 
-def test(boards, pruning=False):
+def test(boards, depth, pruning=False):
     game = TicTacToe_Agent()
     
     total_time = 0
@@ -60,7 +60,7 @@ def test(boards, pruning=False):
         for i in boards:
             game.set_board(i)
             t1 = time.time()
-            ai_move, n = game.get_ai_move_alpha_beta(False)
+            ai_move, n = game.get_ai_move_alpha_beta(depth, False)
             t2 = time.time()
             total_time += (t2-t1)*1e6
             total_nodes += n
@@ -68,7 +68,7 @@ def test(boards, pruning=False):
         for i in boards:
             game.set_board(i)
             t1 = time.time()
-            ai_move, n = game.get_ai_move(False)
+            ai_move, n = game.get_ai_move(depth, False)
             t2 = time.time()
             total_time += (t2-t1)*1e6
             total_nodes += n
@@ -139,8 +139,8 @@ def test_evaluation():
 
 test_winning_condition_for_x()
 test_blocking_move()
-# test_draw_condition()
-# test_evaluation()
+test_draw_condition()
+test_evaluation()
 
 boards = [[
         [None, 'X', 'O'],
@@ -219,12 +219,27 @@ boards = [[
   
     
     ]
+def test_1():
+    game = TicTacToe_Agent()
+    board_state = [
+        ['O', 'X', 'X'],
+        [None, 'X', 'O'],
+        [None, None, 'O']
+    ]
+    game.set_board(board_state)
+    depth = 0
+    ai_move, n = game.get_ai_move(depth, False)  # Assuming 'O' is the AI here
+    print(ai_move)
+    assert ai_move == (2, 0) or ai_move == (2,1), "AI should block 'X' from winning."
 
-# t1, n1 = test(boards, True)
-# print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "ms")
+test_1()
+
+
+# t1, n1 = test(boards, 7, True)
+# print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "us")
 # print("Average number of nodes evaluated: ", int(n1))
-# t2, n2 = test(boards, False)
-# print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "ms")
+# t2, n2 = test(boards, 7, False)
+# print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "us")
 # print("Average number of nodes evaluated: ", int(n2))
 
 

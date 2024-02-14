@@ -11,13 +11,14 @@ class TicTacToe_Agent:
     def set_board(self, board):
         self.board = board
 
-    def get_ai_move(self, n, is_maximising=True):
-        _, move, n = self.minimax(self.board, 9, n, is_maximising, n)
+    def get_ai_move(self, depth, is_maximising=True):
+        n=1
+        _, move, n = self.minimax(self.board, 9, depth, is_maximising, n)
         return move, n
     
-    def get_ai_move_alpha_beta(self, is_maximising=True):
+    def get_ai_move_alpha_beta(self, depth, is_maximising=True):
         n=1
-        _, move, n = self.minimax_with_alpha_beta_pruning(self.board, 9, -math.inf, math.inf, is_maximising, n)
+        _, move, n = self.minimax_with_alpha_beta_pruning(self.board, 9, depth, -math.inf, math.inf, is_maximising, n)
         return move, n
     
     def choose_starting_player(self):
