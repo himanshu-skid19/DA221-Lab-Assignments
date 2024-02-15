@@ -232,15 +232,15 @@ def test_1():
     print(ai_move)
     assert ai_move == (2, 0) or ai_move == (2,1), "AI should block 'X' from winning."
 
-test_1()
+# test_1()
 
 
-# t1, n1 = test(boards, 7, True)
-# print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "us")
-# print("Average number of nodes evaluated: ", int(n1))
-# t2, n2 = test(boards, 7, False)
-# print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "us")
-# print("Average number of nodes evaluated: ", int(n2))
+t1, n1 = test(boards, 0, True)
+print("Average time taken for Minimax with Alpha-Beta Pruning: ", t1, "us")
+print("Average number of nodes evaluated: ", int(n1))
+t2, n2 = test(boards, 0, False)
+print("Average time taken for Minimax without Alpha Beta Pruning: ", t2, "us")
+print("Average number of nodes evaluated: ", int(n2))
 
 
 # game = TicTacToe_Agent()
